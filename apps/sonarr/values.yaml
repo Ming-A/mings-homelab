@@ -167,6 +167,8 @@ persistence:
     accessMode: ReadWriteMany  # Required for NFS
     size: 1000Gi  # Adjust based on your media size
     retain: true
+    parameters:
+      subDir: ""
 
 metrics:
   # -- Enable and configure Exportarr sidecar and Prometheus serviceMonitor.
