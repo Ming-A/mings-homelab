@@ -158,6 +158,15 @@ persistence:
     # specify a size for memory backed volumes.
    # sizeLimit: # 1Gi
 
+# New media volume
+  media:
+    enabled: true
+    type: pvc
+    mountPath: /media  # Mount path in the container
+    storageClass: "media-yozora"
+    accessMode: ReadWriteMany  # Required for NFS
+    size: 1000Gi  # Adjust based on your media size
+    retain: true
 
 metrics:
   # -- Enable and configure Exportarr sidecar and Prometheus serviceMonitor.
