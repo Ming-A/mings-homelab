@@ -177,7 +177,7 @@ imagePullSecrets: []
 storageClass:
   create: true
   name: yozora-synology-persistent-storage
-   annotations:
+#   annotations:
 #     storageclass.kubernetes.io/is-default-class: "true"
    parameters:
      server: 10.69.15.3
