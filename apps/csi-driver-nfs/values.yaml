@@ -174,20 +174,43 @@ imagePullSecrets: []
 # - name: "image-pull-secret"
 
 ## StorageClass resource example:
-storageClass:
-  create: true
-  name: yozora-synology-persistent-storage
-#   annotations:
-#     storageclass.kubernetes.io/is-default-class: "true"
-  parameters:
-    server: 10.69.15.3
-    share: /volume1/beta-k8-persistent-storage
-#     subDir:
-#     mountPermissions: "0"
-#     csi.storage.k8s.io/provisioner-secret is only needed for providing mountOptions in DeleteVolume
-#     csi.storage.k8s.io/provisioner-secret-name: "mount-options"
-#     csi.storage.k8s.io/provisioner-secret-namespace: "default"
-  reclaimPolicy: Retain
-  volumeBindingMode: Immediate
-  mountOptions:
-    - nfsvers=4.1
+
+# storageClass:
+#   create: true
+#   name: yozora-synology-persistent-storage
+# #   annotations:
+# #     storageclass.kubernetes.io/is-default-class: "true"
+#   parameters:
+#     server: 10.69.15.3
+#     share: /volume1/beta-k8-persistent-storage
+# #     subDir:
+# #     mountPermissions: "0"
+# #     csi.storage.k8s.io/provisioner-secret is only needed for providing mountOptions in DeleteVolume
+# #     csi.storage.k8s.io/provisioner-secret-name: "mount-options"
+# #     csi.storage.k8s.io/provisioner-secret-namespace: "default"
+#   reclaimPolicy: Retain
+#   volumeBindingMode: Immediate
+#   mountOptions:
+#     - nfsvers=4.1
+
+storageClasses:
+  - name: yozora-synology-persistent-storage
+    create: true
+    parameters:
+      server: 10.69.15.3
+      share: /volume1/beta-k8-persistent-storage
+    reclaimPolicy: Retain
+    volumeBindingMode: Immediate
+    mountOptions:
+      - nfsvers=4.1
+
+  # New StorageClass for /volume1/media-storage
+  - name: media-storage
+    create: true
+    parameters:
+      server: 10.69.15.3  # Same Synology IP
+      share: /volume1/media-storage  # New NFS path
+    reclaimPolicy: Retain
+    volumeBindingMode: Immediate
+    mountOptions:
+      - nfsvers=4.1
