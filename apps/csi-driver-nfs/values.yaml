@@ -192,4 +192,21 @@ storageClass:
   mountOptions:
     - nfsvers=4.1
 
+storageClass2:
+  create: true
+  name: media-yozora
+#   annotations:
+#     storageclass.kubernetes.io/is-default-class: "true"
+  parameters:
+    server: 10.69.15.3
+    share: /volume1/media-storage
+#     subDir:
+#     mountPermissions: "0"
+#     csi.storage.k8s.io/provisioner-secret is only needed for providing mountOptions in DeleteVolume
+#     csi.storage.k8s.io/provisioner-secret-name: "mount-options"
+#     csi.storage.k8s.io/provisioner-secret-namespace: "default"
+  reclaimPolicy: Retain
+  volumeBindingMode: Immediate
+  mountOptions:
+    - nfsvers=4.1
 

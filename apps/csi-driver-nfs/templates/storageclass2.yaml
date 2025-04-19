@@ -1,0 +1,24 @@
+{{- if .Values.storageClass2.create }}
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.storageClass2.name }}
+{{ include "nfs.labels" . | indent 2 }}
+  annotations:
+    {{- with .Values.storageClass2.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+provisioner: {{ .Values.driver.name }}
+{{- with .Values.storageClass2.parameters }}
+parameters:
+{{ toYaml . | indent 2 }}
+{{- end }}
+reclaimPolicy: {{ .Values.storageClass2.reclaimPolicy }}
+volumeBindingMode: {{ .Values.storageClass2.volumeBindingMode }}
+allowVolumeExpansion: true
+{{- with .Values.storageClass2.mountOptions }}
+mountOptions:
+{{ toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}
