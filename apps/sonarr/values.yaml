@@ -161,16 +161,11 @@ persistence:
 # New media volume
   media:
     enabled: true
-    type: pvc
-    mountPath: /media  # Mount path in the container
-    # -- If you want to reuse an existing claim, the name of the existing PVC can be passed here.
-    existingClaim:  "yozora-media-storage"
-    # storageClass: "yozora-media-storage"
-    # accessMode: ReadWriteMany  # Required for NFS
-    # size: 1000Gi  # Adjust based on your media size
-    # retain: true
-    # parameters:
-    #   subDir: ""
+    type: nfs
+    name: yozora-media
+    server: 10.69.15.3
+    path: /volume1/media-storage
+    mountPath: /data/media # <<< Path inside the container
 
 
 metrics:
