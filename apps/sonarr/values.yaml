@@ -159,28 +159,19 @@ persistence:
    # sizeLimit: # 1Gi
 
 # New media volume
-  # media:
-  #   enabled: true
-  #   type: pvc
-  #   mountPath: /media  # Mount path in the container
-  #   storageClass: "media-yozora"
-  #   accessMode: ReadWriteMany  # Required for NFS
-  #   size: 1000Gi  # Adjust based on your media size
-  #   retain: true
-  #   parameters:
-  #     subDir: ""
+  media:
+    enabled: true
+    type: pvc
+    mountPath: /media  # Mount path in the container
+    # -- If you want to reuse an existing claim, the name of the existing PVC can be passed here.
+    existingClaim:  "yozora-media-storage"
+    # storageClass: "yozora-media-storage"
+    # accessMode: ReadWriteMany  # Required for NFS
+    # size: 1000Gi  # Adjust based on your media size
+    # retain: true
+    # parameters:
+    #   subDir: ""
 
-additionalVolumes:
-  - name: media-yozora # Choose a descriptive name for the volume
-    nfs:
-      server: 10.69.15.3 # Your NFS server IP
-      path: /volume1/media-storage # The EXACT root path you want to mount
-      readOnly: false # Set to true if you only need read access
-
-# -- Define additional volume mounts for the main container
-additionalVolumeMounts:
-  - name: media-yozora # MUST match the 'name' defined in additionalVolumes above
-    mountPath: /media # The path where it should be mounted inside the Sonarr container
 
 metrics:
   # -- Enable and configure Exportarr sidecar and Prometheus serviceMonitor.
