@@ -1,13 +1,22 @@
 global: 
   commonLabels: {}
-  
+
 image:
   repository: quay.io/jetstack/cert-manager-controller
   tag: v1.17.2
+
 webhook:
   image:
     repository: quay.io/jetstack/cert-manager-webhook
     tag: v1.17.2
+  validatingWebhookConfiguration:
+    namespaceSelector:
+      matchExpressions:
+        - key: "cert-manager.io/disable-validation"
+          operator: "NotIn"
+          values:
+            - "true"
+
 cainjector:
   image:
     repository: quay.io/jetstack/cert-manager-cainjector
