@@ -16,6 +16,7 @@ webhook:
           operator: "NotIn"
           values:
             - "true"
+  url: {}
 
 cainjector:
   image:
