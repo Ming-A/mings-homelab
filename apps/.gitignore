@@ -1,0 +1,16 @@
+# Temporary files
+*.tmp
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# Kustomize build output
+/build/
+
+# Secrets (never commit these!)
+*secret*.yaml
+*password*.yaml
+*credential*.yaml

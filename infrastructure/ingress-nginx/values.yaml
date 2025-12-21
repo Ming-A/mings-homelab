@@ -1,0 +1,18 @@
+controller:
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: true
+    controllerValue: "k8s.io/ingress-nginx"
+  
+  service:
+    type: LoadBalancer
+  
+  # K3s-specific: watch ingress from all namespaces
+  watchIngressWithoutClass: true
+  
+  # Enable metrics for monitoring
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: false  # Set to true if using Prometheus Operator
