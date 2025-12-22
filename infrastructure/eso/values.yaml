@@ -1,0 +1,6 @@
+certController:
+  enabled: false
+
+clusterSecretStore:
+  create: true
+  name: openbao-eso

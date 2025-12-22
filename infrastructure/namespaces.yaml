@@ -12,3 +12,13 @@ metadata:
   name: monitoring
   labels:
     purpose: monitoring-tools
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openbao
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external-secrets
