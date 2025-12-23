@@ -5,9 +5,10 @@ server:
   ha:
     enabled: true
     replicas: 3
-    raft: 
+    raft:
       enabled: true
-    
+    antiAffinity: required
+  
   ui:
     enabled: true
   
@@ -23,7 +24,19 @@ server:
     storage "raft" {
       path = "/openbao/data"
       node_id = "openbao-${POD_NAME}"
+      
+      retry_join {
+        leader_api_addr = "http://openbao-0.openbao-internal.openbao.svc.cluster.local:8200"
+      }
+      retry_join {
+        leader_api_addr = "http://openbao-1.openbao-internal.openbao.svc.cluster.local:8200"
+      }
+      retry_join {
+        leader_api_addr = "http://openbao-2.openbao-internal.openbao.svc.cluster.local:8200"
+      }
     }
+    
+    service_registration "kubernetes" {}
 
 dev:
   enabled: false
