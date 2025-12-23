@@ -11,4 +11,5 @@ spec:
       auth:
         tokenSecretRef:
           name: "eso-openbao-token"
+          namespace: "external-secrets"
           key: "token"
