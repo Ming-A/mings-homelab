@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "HOSTNAME_PLACEHOLDER"
+  - host: "temp-placeholder.local"
     http:
       paths:
       - path: /
