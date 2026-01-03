@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: 'https://github.com/Ming-A/mings-homelab.git'
     targetRevision: HEAD
-    path: infrastructure
+    path: infrastructure/namespaces
     directory:
       recurse: false
       include: namespaces.yaml
@@ -73,7 +73,7 @@ spec:
     syncOptions:
     - CreateNamespace=true
 
- ---
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -94,6 +94,63 @@ spec:
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: ingress-nginx
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-secrets
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/Ming-A/mings-homelab.git'
+    targetRevision: HEAD
+    path: infrastructure/argocd
+    directory:
+      recurse: false
+      include: argocd-secrets.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
+spec:
+  project: default
+  source:
+    repoURL: 'https://argoproj.github.io/argo-helm'
+    chart: argo-cd
+    targetRevision: 9.2.4
+    helm:
+      valueFiles:
+        - values.yaml
+      valuesFrom:
+      - kind: Secret
+        name: argocd-ingress-host
+        valuesKey: hostname
+        targetPath: server.ingress.hosts[0]
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
