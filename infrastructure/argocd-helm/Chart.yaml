@@ -1,0 +1,5 @@
+apiVersion: v2
+name: argocd-ingress
+description: A minimal Helm chart for the ArgoCD Ingress
+type: application
+version: 0.1.0

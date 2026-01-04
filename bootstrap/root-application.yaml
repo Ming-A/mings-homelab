@@ -157,3 +157,31 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-ingress
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "7"
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/Ming-A/mings-homelab.git'
+    targetRevision: HEAD
+    path: infrastructure/argocd-helm
+    helm:
+      valuesFrom:
+      - kind: Secret
+        name: argocd-ingress-host
+        valuesKey: hostname
+        targetPath: ingress.host
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
