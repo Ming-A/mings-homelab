@@ -120,16 +120,21 @@ spec:
         - values.yaml
       values: |
         repoServer:
+          volumes:
+            - name: custom-tools
+              emptyDir: {}
+          volumeMounts:
+            - mountPath: /usr/local/bin/argocd-vault-plugin
+              subPath: argocd-vault-plugin
+              name: custom-tools
           extraContainers:
             - name: argocd-vault-plugin
-              image: argoproj/argocd-vault-plugin:v1.18.0
+              command: ["sleep", "infinity"]
+              image: debian:bullseye-slim
               securityContext:
                 runAsNonRoot: true
                 runAsUser: 999
-              command:
-                - /argocd-vault-plugin
               env:
-                # OpenBao Connection
                 - name: AVP_TYPE
                   value: "openbao"
                 - name: VAULT_ADDR
@@ -143,18 +148,32 @@ spec:
                 - name: K8S_TOKEN_PATH
                   value: /var/run/secrets/kubernetes.io/serviceaccount/token
               volumeMounts:
-                - mountPath: /home/argocd
-                  name: avp-config
-          volumes:
-            - name: avp-config
-              emptyDir: {}
-          plugins:
-            - name: argocd-vault-plugin
-              generate:
-                command: ["/argocd-vault-plugin"]
-                args: ["generate", "./"]
+                - mountPath: /usr/local/bin/argocd-vault-plugin
+                  subPath: argocd-vault-plugin
+                  name: custom-tools
+          initContainers:
+            - name: download-tools
+              image: alpine:latest
+              command: [sh, -c]
+              env:
+                - name: AVP_VERSION
+                  value: "1.18.0"
+              args:
+                - >-
+                  wget -q -O /custom-tools/argocd-vault-plugin
+                  https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v${AVP_VERSION}/argocd-vault-plugin_${AVP_VERSION}_linux_amd64 &&
+                  chmod +x /custom-tools/argocd-vault-plugin
+              volumeMounts:
+                - mountPath: /custom-tools
+                  name: custom-tools
+          automountServiceAccountToken: true
         configs:
           cm:
+            configManagementPlugins: |
+              - name: argocd-vault-plugin
+                generate:
+                  command: ["argocd-vault-plugin"]
+                  args: ["generate", "./"]
             resource.customizations: |
               argoproj.io/Application:
                 plugin:
