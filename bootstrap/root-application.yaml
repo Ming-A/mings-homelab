@@ -105,35 +105,10 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd-secrets
-  namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "5"
-spec:
-  project: default
-  source:
-    repoURL: 'https://github.com/Ming-A/mings-homelab.git'
-    targetRevision: HEAD
-    path: infrastructure/argocd
-    directory:
-      recurse: false
-      include: argocd-secrets.yaml
-  destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: argocd
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
   name: argocd
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "6"
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   project: default
   source:
@@ -143,11 +118,47 @@ spec:
     helm:
       valueFiles:
         - values.yaml
-      valuesFrom:
-      - kind: Secret
-        name: argocd-ingress-host
-        valuesKey: hostname
-        targetPath: server.ingress.hosts[0]
+      values: |
+        repoServer:
+          extraContainers:
+            - name: argocd-vault-plugin
+              image: argoproj/argocd-vault-plugin:v1.18.0
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 999
+              command:
+                - /argocd-vault-plugin
+              env:
+                # OpenBao Connection
+                - name: AVP_TYPE
+                  value: "openbao"
+                - name: VAULT_ADDR
+                  value: "http://openbao.openbao.svc:8200"
+                - name: VAULT_AUTH_METHOD
+                  value: "kubernetes"
+                - name: K8S_MOUNT_PATH
+                  value: "kubernetes"
+                - name: K8S_ROLE
+                  value: "argocd-repo-server"
+                - name: K8S_TOKEN_PATH
+                  value: /var/run/secrets/kubernetes.io/serviceaccount/token
+              volumeMounts:
+                - mountPath: /home/argocd
+                  name: avp-config
+          volumes:
+            - name: avp-config
+              emptyDir: {}
+          plugins:
+            - name: argocd-vault-plugin
+              generate:
+                command: ["/argocd-vault-plugin"]
+                args: ["generate", "./"]
+        configs:
+          cm:
+            resource.customizations: |
+              argoproj.io/Application:
+                plugin:
+                  name: argocd-vault-plugin
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
@@ -165,19 +176,15 @@ metadata:
   name: argocd-ingress
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "7"
+    argocd.argoproj.io/sync-wave: "6"
 spec:
   project: default
   source:
     repoURL: 'https://github.com/Ming-A/mings-homelab.git'
     targetRevision: HEAD
-    path: infrastructure/argocd-helm
-    helm:
-      valuesFrom:
-      - kind: Secret
-        name: argocd-ingress-host
-        valuesKey: hostname
-        targetPath: ingress.host
+    path: infrastructure/argocd
+    plugin:
+      name: argocd-vault-plugin
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
