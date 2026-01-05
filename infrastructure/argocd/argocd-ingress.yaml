@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   rules:
-  - host: <value>
+  - host: <path:secret/data/hosts/argocd-host#value>
     http:
       paths:
       - path: /
