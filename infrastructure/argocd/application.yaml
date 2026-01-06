@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://argoproj.github.io/argo-helm
+    targetRevision: 9.2.4
+    chart: argo-cd
+    helm:
+      values: |
+        server:
+          insecure: true
+        repoServer:
+          volumes:
+            - name: custom-tools
+              emptyDir: {}
+          volumeMounts:
+            - mountPath: /usr/local/bin/argocd-vault-plugin
+              name: custom-tools
+              subPath: argocd-vault-plugin
+          env:
+            - name: VAULT_ADDR
+              value: "http://openbao-active.openbao.svc:8200"
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: argocd-vault-token
+                  key: VAULT_TOKEN
+            - name: AVP_TYPE
+              value: "vault"
+            - name: AVP_AUTH_TYPE
+              value: "token"
+        configs:
+          cm:
+            configManagementPlugins: |
+              - name: argocd-vault-plugin
+                generate:
+                  command: ["argocd-vault-plugin"]
+                  args: ["generate", "./"]
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
