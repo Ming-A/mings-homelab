@@ -1,0 +1,30 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: gateway-internal
+  namespace: gateway
+spec:
+  addresses:
+  - type: IPAddress
+    value: 10.69.40.98
+  gatewayClassName: cilium
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: "*.local.mingsoonang.com"
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "*.local.mingsoonang.com"
+      tls:
+        certificateRefs:
+          - name: cert-mingsoonang
+            kind: Secret
+            group: "" # required
+      allowedRoutes:
+        namespaces:
+          from: All
