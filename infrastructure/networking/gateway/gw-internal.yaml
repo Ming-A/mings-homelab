@@ -21,10 +21,21 @@ spec:
       port: 443
       hostname: "*.local.mingsoonang.com"
       tls:
+        mode: Terminate
         certificateRefs:
           - name: cert-mingsoonang
             kind: Secret
             group: "" # required
+        # No QUIC/HTTP3 for internal gateway - only HTTP/2 and HTTP/1.1
+        options:
+          gateway.networking.k8s.io/alpn-protocols: "h2,http/1.1"
       allowedRoutes:
         namespaces:
           from: All
+    # TCP listener for PostgreSQL
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      allowedRoutes:
+        namespaces:
+          from: Same
