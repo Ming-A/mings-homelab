@@ -9,7 +9,7 @@ spec:
     namespace: gateway
     sectionName: https # Must match your Gateway's listeners[].name
   hostnames:
-  - "grafana.mingsoonang.com"
+  - "grafana.local.mingsoonang.com"
   rules:
   - matches:
     - path:

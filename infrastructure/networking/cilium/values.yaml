@@ -9,7 +9,7 @@
 # `k8sServicePort: 7445` in the inline bootstrap ConfigMap only.
 # cluster info
 cluster:
-  name: proxmox-talos-lab-cluster # Align with Talos clusterName for observability consistency
+  name: lilith-talos-cluster # Align with Talos clusterName for observability consistency
   id: 1
 # API server reachable from Cilium agents (control-plane IP from Terraform)
 # Set to your control-plane IP or use k8s.apiServerURLs for HA
