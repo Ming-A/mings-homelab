@@ -12,3 +12,8 @@ Below is the topology of my current homelab where im in the progress of migratin
 ### Topology
 
 ![Topology](https://github.com/user-attachments/assets/960d9eef-6290-4672-b5e7-242f886bab44)
+
+## 🤝 Thanks
+
+- [Cluster template](https://github.com/onedr0p/cluster-template/) Talos cluster deployment.
+- [Home Operations](https://discord.gg/home-operations) Discord server.
