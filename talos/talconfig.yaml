@@ -20,14 +20,14 @@ cniConfig:
 nodes:
   - hostname: "lilith-talos-master-1"
     ipAddress: "10.69.40.21"
-    installDisk: "/dev/sda"
+    installDisk: "/dev/nvme0n1"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/ddf38e55e30aa9b2bb0b765054ed63444dc00244ab8bb4ad4ad92486602285f8
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:bd:00:83"
+          hardwareAddr: "08:c0:eb:bd:c9:a8"
         dhcp: false
         addresses:
           - "10.69.40.21/24"
@@ -36,16 +36,25 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.69.40.100"
+    patches:
+      - # Load kernel modules
+        |-
+        machine:
+          kernel:
+            modules:
+              - name: nvme_tcp
+              - name: vfio_pci
+              - name: uio_pci_generic
   - hostname: "lilith-talos-master-2"
     ipAddress: "10.69.40.22"
-    installDisk: "/dev/sda"
+    installDisk: "/dev/nvme0n1"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/ddf38e55e30aa9b2bb0b765054ed63444dc00244ab8bb4ad4ad92486602285f8
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:bb:e8:61"
+          hardwareAddr: "e4:1d:2d:2a:01:30"
         dhcp: false
         addresses:
           - "10.69.40.22/24"
@@ -54,16 +63,25 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.69.40.100"
+    patches:
+      - # Load kernel modules
+        |-
+        machine:
+          kernel:
+            modules:
+              - name: nvme_tcp
+              - name: vfio_pci
+              - name: uio_pci_generic
   - hostname: "lilith-talos-master-3"
     ipAddress: "10.69.40.23"
-    installDisk: "/dev/sda"
+    installDisk: "/dev/nvme0n1"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/ddf38e55e30aa9b2bb0b765054ed63444dc00244ab8bb4ad4ad92486602285f8
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:7d:2f:e8"
+          hardwareAddr: "08:c0:eb:bd:c3:8c"
         dhcp: false
         addresses:
           - "10.69.40.23/24"
@@ -72,6 +90,15 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.69.40.100"
+    patches:
+      - # Load kernel modules
+        |-
+        machine:
+          kernel:
+            modules:
+              - name: nvme_tcp
+              - name: vfio_pci
+              - name: uio_pci_generic
 
 # Global patches
 patches:
