@@ -4,10 +4,10 @@ clusterName: kubernetes
 talosVersion: "${talosVersion}"
 kubernetesVersion: "${kubernetesVersion}"
 
-endpoint: https://10.69.40.100:6443
+endpoint: https://10.69.40.20:6443
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
-  - "10.69.40.100"
+  - "10.69.40.20"
 additionalMachineCertSans: *sans
 
 clusterPodNets: ["10.42.0.0/16"]
@@ -33,9 +33,10 @@ nodes:
           - "10.69.40.21/24"
         routes:
           - gateway: "10.69.40.1"
+            network: 0.0.0.0/0
         mtu: 1500
         vip:
-          ip: "10.69.40.100"
+          ip: "10.69.40.20"
     patches:
       - # Load kernel modules
         |-
@@ -60,9 +61,10 @@ nodes:
           - "10.69.40.22/24"
         routes:
           - gateway: "10.69.40.1"
+            network: 0.0.0.0/0
         mtu: 1500
         vip:
-          ip: "10.69.40.100"
+          ip: "10.69.40.20"
     patches:
       - # Load kernel modules
         |-
@@ -87,9 +89,10 @@ nodes:
           - "10.69.40.23/24"
         routes:
           - gateway: "10.69.40.1"
+            network: 0.0.0.0/0
         mtu: 1500
         vip:
-          ip: "10.69.40.100"
+          ip: "10.69.40.20"
     patches:
       - # Load kernel modules
         |-
