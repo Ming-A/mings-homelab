@@ -20,10 +20,10 @@ cniConfig:
 nodes:
   - hostname: "lilith-talos-master-1"
     ipAddress: "10.69.40.21"
-    installDisk: "/dev/nvme0n1"
+    installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/ddf38e55e30aa9b2bb0b765054ed63444dc00244ab8bb4ad4ad92486602285f8
+    talosImageURL: factory.talos.dev/installer/089f46f30ad45c69b751cb3a4d6635fd7bae237314d7ba6be7dcbf3a6c3ac99e
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -48,10 +48,10 @@ nodes:
               - name: uio_pci_generic
   - hostname: "lilith-talos-master-2"
     ipAddress: "10.69.40.22"
-    installDisk: "/dev/nvme0n1"
+    installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/ddf38e55e30aa9b2bb0b765054ed63444dc00244ab8bb4ad4ad92486602285f8
+    talosImageURL: factory.talos.dev/installer/089f46f30ad45c69b751cb3a4d6635fd7bae237314d7ba6be7dcbf3a6c3ac99e
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -76,10 +76,10 @@ nodes:
               - name: uio_pci_generic
   - hostname: "lilith-talos-master-3"
     ipAddress: "10.69.40.23"
-    installDisk: "/dev/nvme0n1"
+    installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/ddf38e55e30aa9b2bb0b765054ed63444dc00244ab8bb4ad4ad92486602285f8
+    talosImageURL: factory.talos.dev/installer/089f46f30ad45c69b751cb3a4d6635fd7bae237314d7ba6be7dcbf3a6c3ac99e
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
